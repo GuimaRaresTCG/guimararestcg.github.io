@@ -98,7 +98,9 @@ nav a[aria-current="page"]{color:var(--gold2);box-shadow:0 2px 0 var(--gold)}
 .card h3{margin:0 0 .4rem;font-family:var(--display);font-style:italic;font-weight:800;font-size:1.7rem;color:var(--gold2)}
 .card p{margin:0 0 1.1rem;color:var(--muted)}
 select{font:inherit;padding:.7rem .9rem;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink)}
-.filelist{color:var(--muted);font-size:.9rem;margin-top:-.4rem}
+.formnote{margin:0;color:var(--muted);font-size:.95rem}
+.formnote a{color:var(--gold2)}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
 .doc{max-width:44rem;padding-bottom:3rem}
 .doc h2{font-family:var(--display);font-style:italic;font-weight:800;font-size:1.6rem;margin:2rem 0 .4rem;color:var(--gold)}
 .doc p{margin:0 0 1rem;color:var(--muted)}
@@ -254,7 +256,7 @@ form[hidden]{display:none}
     <div class="grid" id="customGrid"></div>
     <h2 class="grp">How it works</h2>
     <ol class="steps">
-      <li><h3>Share your idea</h3><p>Send photos, sketches or a description of what you want.</p></li>
+      <li><h3>Share your idea</h3><p>Tell us what you want. Send photos or sketches on Instagram.</p></li>
       <li><h3>Review the design</h3><p>We build the 3D model and a quote, and you approve it.</p></li>
       <li><h3>We make it</h3><p>Your piece is made to order and shipped to you.</p></li>
     </ol>
@@ -267,8 +269,7 @@ form[hidden]{display:none}
       <label>Game or theme<input name="theme" placeholder="Example: Pokémon, a favorite character, team colors"></label>
       <label>Size or capacity<input name="size" placeholder="Example: holds 100 sleeved cards"></label>
       <label>Colors<input name="colors"></label>
-      <label>Photos or reference images<input name="photos" id="photos" type="file" accept="image/*" multiple></label>
-      <div class="filelist" id="fileList" aria-live="polite"></div>
+      <p class="formnote">Have photos or reference images? After you send this request, message them to us on <a href="https://www.instagram.com/guimararestcg/" target="_blank" rel="noopener noreferrer">Instagram</a> and mention your name.</p>
       <label>Details<textarea name="msg" rows="5" required placeholder="Anything else we should know, like names, artwork or how many you need"></textarea></label>
       <button class="btn" type="submit">Send request</button>
       <div class="note" role="status"></div>
@@ -349,9 +350,9 @@ form[hidden]{display:none}
       <details class="qa"><summary>What do you sell?</summary><p>Singles, booster boxes, booster bundles and sealed product for Pokémon, One Piece, Magic: The Gathering, Yu-Gi-Oh!, Riftbound and other popular games. We also sell accessories and custom products.</p></details>
       <details class="qa"><summary>How do I buy something I see in the shop?</summary><p>Send us a message on the <a href="#/contact">Contact</a> page with what you want, and we will confirm availability and next steps.</p></details>
       <details class="qa"><summary>How do you describe card condition?</summary><p>Each single is listed with a condition such as Near Mint or Lightly Played. If a card does not match its description, see our <a href="#/returns">return and refund policy</a>.</p></details>
-      <details class="qa"><summary>Do you buy collections?</summary><p>Yes. Send us a list and photos on the <a href="#/sell">Sell &amp; Trade</a> page and we will reply with an offer.</p></details>
+      <details class="qa"><summary>Do you buy collections?</summary><p>Yes. Send us a list on the <a href="#/sell">Sell &amp; Trade</a> page, and photos on Instagram if you have them and we will reply with an offer.</p></details>
       <details class="qa"><summary>What is the difference between cash and trade credit?</summary><p>Cash is paid to you for your cards. Trade credit goes toward anything in the shop, and it pays more than cash.</p></details>
-      <details class="qa"><summary>Can you make a custom deck box, caddy or bulk box?</summary><p>Yes. Share photos and your idea on the <a href="#/custom">Custom Products</a> page. We build a 3D model and a quote for your approval before making anything.</p></details>
+      <details class="qa"><summary>Can you make a custom deck box, caddy or bulk box?</summary><p>Yes. Share your idea on the <a href="#/custom">Custom Products</a> page, and send photos on Instagram. We build a 3D model and a quote for your approval before making anything.</p></details>
       <details class="qa"><summary>Can I return something?</summary><p>In many cases, yes. Our <a href="#/returns">Returns &amp; Refunds</a> page has the details.</p></details>
       <details class="qa"><summary>Are you affiliated with the game publishers?</summary><p>No. We are an independent shop. All game and card names belong to their owners.</p></details>
       <details class="qa"><summary>I cannot find the card I am looking for.</summary><p>Ask us on the <a href="#/contact">Contact</a> page. We can search for it.</p></details>
@@ -393,7 +394,7 @@ form[hidden]{display:none}
     <div class="doc">
       <p>This policy explains what information GuimaRares &amp; Holos collects, how we use it and the choices you have.</p>
       <h2>Information we collect</h2>
-      <p>We collect what you give us: your name, email address, messages, details about cards you want to sell or trade, and any photos you upload with a custom product request. If we offer online payment, your payment is handled by a third-party payment processor, and we do not store your full card number. We may also collect basic technical data, such as your browser type and pages visited, if we use analytics.</p>
+      <p>We collect what you give us: your name, email address, messages, details about cards you want to sell or trade, and any photos you send us for a custom product request. If we offer online payment, your payment is handled by a third-party payment processor, and we do not store your full card number. We may also collect basic technical data, such as your browser type and pages visited, if we use analytics.</p>
       <h2>How we use it</h2>
       <p>We use your information to reply to you, prepare offers and quotes, process and ship orders, handle returns, and improve the site. We send marketing emails only if you ask to receive them, and every such email will include a way to unsubscribe.</p>
       <h2>Who we share it with</h2>
@@ -587,10 +588,6 @@ form[hidden]{display:none}
   $("customGrid").innerHTML=custom.map(function(c){return card(c[0],c[1],c[2],"Custom quote")}).join("");
   $("toForm").onclick=function(){var f=$("cForm");f.scrollIntoView({behavior:reduceMotion()?"auto":"smooth",block:"start"});f.focus({preventScroll:true})};
   function reduceMotion(){return window.matchMedia("(prefers-reduced-motion: reduce)").matches}
-  $("photos").addEventListener("change",function(){
-    var n=[];for(var i=0;i<this.files.length;i++)n.push(this.files[i].name);
-    $("fileList").textContent=n.length?"Selected: "+n.join(", "):"";
-  });
 
   // cart
   var cart={};
@@ -679,10 +676,27 @@ form[hidden]{display:none}
   window.addEventListener("hashchange",route);route();
 
   // forms
+  var FORM_ENDPOINT="https://formspree.io/f/xkjrolpz";
+  var formNames={"pg-contact":"Contact message","pg-sell":"Sell or trade offer","pg-custom":"Custom product request"};
   var forms=document.querySelectorAll("[data-form]");
-  for(var i=0;i<forms.length;i++){forms[i].addEventListener("submit",function(e){
-    e.preventDefault();e.target.querySelector(".note").textContent="Thanks! Your message will send once the form is connected to your email.";
-  })}
+  for(var i=0;i<forms.length;i++){
+    var hp=document.createElement("input");hp.type="text";hp.name="_gotcha";hp.className="hp";hp.tabIndex=-1;hp.setAttribute("autocomplete","off");hp.setAttribute("aria-hidden","true");
+    forms[i].appendChild(hp);
+    forms[i].addEventListener("submit",function(e){
+      e.preventDefault();
+      var f=e.target,note=f.querySelector(".note"),btn=f.querySelector('button[type="submit"]');
+      if(!FORM_ENDPOINT){note.textContent="This form is not connected yet, so nothing was sent. Please message us on Instagram for now.";return}
+      var pg=f.closest(".pg"),label=(pg&&formNames[pg.id])||"Website message";
+      var data=new FormData(f);data.append("form",label);data.append("_subject",label+" from GuimaRares & Holos");
+      btn.disabled=true;note.textContent="Sending...";
+      fetch(FORM_ENDPOINT,{method:"POST",body:data,headers:{Accept:"application/json"}}).then(function(r){
+        if(!r.ok)throw new Error("bad");
+        f.reset();note.textContent="Thanks! We got your message and will reply by email.";
+      }).catch(function(){
+        note.textContent="Something went wrong and your message was not sent. Please try again, or message us on Instagram.";
+      }).then(function(){btn.disabled=false});
+    });
+  }
 
   // logo tilt
   var el=$("logo"),stage=$("stage"),reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
