@@ -152,15 +152,55 @@ form[hidden]{display:none}
 .cof h3{margin:.6rem 0 0}
 .cof label,.cof input,.cof select{min-width:0}
 select{font:inherit;padding:.7rem .9rem;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink)}
-#acctBody{padding-bottom:2.5rem}
-.acctbar{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1.5rem}
-.acctbar p{margin:0}
-.ordlist{display:grid;gap:1rem;max-width:44rem}
-.ord ul{margin:.6rem 0;padding-left:1.2rem}
-.ordhead{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+#acctBody{padding-bottom:3rem}
+.acctwrap{max-width:46rem}
+.hello{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;padding:1.2rem 1.4rem;border:1px solid var(--line);border-radius:16px;background:linear-gradient(135deg,#3a2f17 0%,var(--surface) 65%);margin-bottom:2rem}
+.avatar{width:3.4rem;height:3.4rem;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-style:italic;font-weight:800;font-size:1.8rem;color:var(--goldink);background:linear-gradient(135deg,var(--gold2),var(--gold));box-shadow:0 0 0 2px var(--deep),0 0 0 4px var(--gold)}
+.hellotxt{flex:1 1 12rem;min-width:0}
+.hellotxt h2{margin:0;font-size:clamp(1.8rem,4vw,2.4rem)}
+.hellotxt p{margin:.15rem 0 0;color:var(--muted);overflow-wrap:anywhere}
+.sechead{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;margin-bottom:.9rem}
+.sechead h3{margin:0;font-family:var(--display);font-style:italic;font-weight:800;font-size:1.9rem;color:var(--gold)}
+.count{color:var(--muted);font-size:.95rem}
+.ordlist{display:grid;gap:1.1rem}
+.ord{padding:1.3rem 1.4rem}
+.ordhead{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1rem}
 .ordhead h3{margin:0}
-.stat{display:inline-block;padding:.15rem .7rem;border-radius:999px;border:1px solid var(--gold);color:var(--gold2);font-size:.85rem;font-weight:700}
-.trk{margin:.6rem 0 0}
+.ordhead small{color:var(--muted)}
+.stat{flex:none;display:inline-block;padding:.2rem .8rem;border-radius:999px;border:1px solid var(--gold);color:var(--gold2);font-size:.82rem;font-weight:700;letter-spacing:.02em}
+.stat.s-shipped{background:#e8b93122}
+.stat.s-delivered{border-color:#3df2d0;color:#3df2d0;background:#3df2d01a}
+.stat.s-cancelled,.stat.s-refunded{border-color:var(--line);color:var(--muted)}
+.prog{list-style:none;display:flex;margin:0 0 1.1rem;padding:0}
+.prog li{flex:1;position:relative;text-align:center;font-size:.82rem;color:var(--muted);padding-top:1.3rem}
+.prog li::before{content:"";position:absolute;top:.38rem;left:-50%;width:100%;height:2px;background:var(--line)}
+.prog li:first-child::before{display:none}
+.prog .dot{position:absolute;top:0;left:50%;transform:translateX(-50%);width:.8rem;height:.8rem;border-radius:50%;background:var(--surface);border:2px solid var(--line);z-index:1}
+.prog li.done,.prog li.now{color:var(--ink)}
+.prog li.done::before,.prog li.now::before{background:var(--gold)}
+.prog li.done .dot{background:var(--gold);border-color:var(--gold)}
+.prog li.now .dot{background:var(--gold2);border-color:var(--gold2);box-shadow:0 0 0 4px #e8b93133}
+.oitems{list-style:none;margin:0 0 .8rem;padding:.8rem 0;border-top:1px solid var(--line)}
+.oitems li{display:flex;justify-content:space-between;gap:1rem;padding:.2rem 0}
+.oitems li span:first-child{min-width:0;overflow-wrap:anywhere}
+.shipto{margin-top:1rem;padding-top:.9rem;border-top:1px solid var(--line);color:var(--muted);font-size:.92rem;line-height:1.5}
+.shipto b{color:var(--ink)}
+.trk{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-top:1rem;padding:.9rem 1rem;border-radius:12px;background:var(--deep);border:1px solid var(--line)}
+.trk small{color:var(--muted)}
+.trk b{overflow-wrap:anywhere}
+.trk .btn{padding:.55rem 1.1rem}
+.emptyord{text-align:center;padding:2.2rem 1.5rem}
+.emptyico{font-size:2.4rem;margin-bottom:.4rem}
+.skel p{margin:0}
+.signwrap{display:grid;grid-template-columns:1.1fr 1fr;gap:2.5rem;align-items:start;max-width:56rem}
+.why h2{margin-bottom:1rem}
+.perks{list-style:none;margin:0 0 1.2rem;padding:0;display:grid;gap:.9rem}
+.perks li{padding-left:1.4rem;position:relative}
+.perks li::before{content:"";position:absolute;left:0;top:.55rem;width:.6rem;height:.6rem;border-radius:50%;background:var(--holo)}
+.perks b{display:block;color:var(--gold2)}
+.perks span{color:var(--muted)}
+.signcard{margin:0}
+@media (max-width:760px){.signwrap{grid-template-columns:1fr;gap:1.5rem}.hello .btn{width:100%}.prog li{font-size:.75rem}}
 .walletrow{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
 .walletrow:not(:empty){margin-bottom:.9rem}
 .walletrow .paybtn{margin-top:0;opacity:1;cursor:pointer;color:var(--ink);border-color:var(--gold)}.walletrow .paybtn:disabled{opacity:.5;cursor:not-allowed}
@@ -1038,24 +1078,39 @@ h1[tabindex="-1"]:focus,h2[tabindex="-1"]:focus{outline:none}
     if(c.indexOf("fedex")>-1)return "https://www.fedex.com/fedextrack/?trknbr="+e;
     return "";
   }
+  var FLOW=["processing","shipped","delivered"];
+  function progressHtml(st){
+    var i=FLOW.indexOf(st);if(i<0)return "";
+    return '<ol class="prog" aria-label="Order progress">'+FLOW.map(function(s,k){
+      return '<li class="'+(k<i?'done':k===i?'now':'')+'"'+(k===i?' aria-current="step"':'')+'><span class="dot"></span>'+STATUS_LABEL[s]+'</li>'}).join("")+'</ol>';
+  }
+  function addrHtml(a){
+    if(!a||typeof a!=="object")return "";
+    var l=[a.line1,a.line2,[a.city,a.state].filter(Boolean).join(", ")+(a.zip?" "+a.zip:"")].filter(function(x){return x&&String(x).trim()});
+    return l.length?'<div class="shipto"><b>Ships to</b><br>'+l.map(function(x){return esc(String(x))}).join("<br>")+'</div>':"";
+  }
   function ordersHtml(){
-    if(ordersState==="loading"||ordersState===null)return '<p>Loading your orders...</p>';
-    if(ordersState==="error")return '<p class="note" role="alert">We could not load your orders. Please refresh and try again.</p>';
-    if(!ordersState.length)return '<div class="card"><p>No orders yet. Orders placed with <b>'+esc(sbUser.email)+'</b> will show up here, including ones you made as a guest.</p><a class="btn" href="#/shop">Start shopping</a></div>';
+    if(ordersState==="loading"||ordersState===null)return '<div class="card skel" aria-busy="true"><p>Loading your orders...</p></div>';
+    if(ordersState==="error")return '<div class="card"><p class="note" role="alert">We could not load your orders. Please refresh and try again.</p></div>';
+    if(!ordersState.length)return '<div class="card emptyord"><div class="emptyico" aria-hidden="true">&#127924;</div><h3>No orders yet</h3><p>Orders placed with <b>'+esc(sbUser.email)+'</b> will show up here, including ones you made as a guest.</p><a class="btn" href="#/shop">Start shopping</a></div>';
     return '<div class="ordlist">'+ordersState.map(function(o){
-      var items=(Array.isArray(o.items)?o.items:[]).map(function(i){return '<li>'+esc(String(i.qty||1))+' &times; '+esc(String(i.name||"Item"))+'</li>'}).join("");
       var st=String(o.status||"processing"),tu=trackUrl(o);
-      var d=o.created_at?new Date(o.created_at).toLocaleDateString("en-US",{year:"numeric",month:"short",day:"numeric"}):"";
-      var track=o.tracking_number?'<p class="trk">Tracking: '+(tu?'<a href="'+esc(tu)+'" target="_blank" rel="noopener noreferrer">'+esc(String(o.tracking_number))+'</a>':esc(String(o.tracking_number)))+(o.carrier?' ('+esc(String(o.carrier))+')':'')+'</p>':'';
-      return '<article class="card ord"><div class="ordhead"><h3>Order '+esc(String(o.order_ref||""))+'</h3><span class="stat">'+esc(STATUS_LABEL[st]||st)+'</span></div><small>'+esc(d)+'</small><ul>'+items+'</ul>'
-        +'<div class="row"><span>Shipping</span><span>'+cents(o.shipping_cents)+'</span></div><div class="row total"><span>Total</span><span>'+cents(o.total_cents)+'</span></div>'+track+'</article>';
+      var items=(Array.isArray(o.items)?o.items:[]).map(function(i){
+        var q=Number(i.qty)||1,line=(Number(i.priceCents)||0)*q;
+        return '<li><span>'+esc(String(q))+' &times; '+esc(String(i.name||"Item"))+'</span><span>'+(i.priceCents?cents(line):"")+'</span></li>'}).join("");
+      var d=o.created_at?new Date(o.created_at).toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"}):"";
+      var track=o.tracking_number?'<div class="trk"><div><small>'+(o.carrier?esc(String(o.carrier))+" tracking":"Tracking")+'</small><br><b>'+esc(String(o.tracking_number))+'</b></div>'+(tu?'<a class="btn" href="'+esc(tu)+'" target="_blank" rel="noopener noreferrer">Track package</a>':"")+'</div>':"";
+      return '<article class="card ord"><div class="ordhead"><div><h3>Order '+esc(String(o.order_ref||""))+'</h3><small>Placed '+esc(d)+'</small></div><span class="stat s-'+esc(st)+'">'+esc(STATUS_LABEL[st]||st)+'</span></div>'
+        +progressHtml(st)+'<ul class="oitems">'+items+'</ul>'
+        +'<div class="row"><span>Shipping</span><span>'+(o.shipping_cents?cents(o.shipping_cents):"Free")+'</span></div><div class="row total"><span>Total</span><span>'+cents(o.total_cents)+'</span></div>'
+        +addrHtml(o.ship_address)+track+'</article>';
     }).join("")+'</div>';
   }
   function loadOrders(){
     if(!sb||!sbUser||ordersState)return;
     ordersState="loading";
-    sb.from("orders").select("order_ref,created_at,items,shipping_cents,total_cents,status,tracking_number,tracking_url,carrier").order("created_at",{ascending:false}).limit(50)
-      .then(function(r){ordersState=r.error?"error":(r.data||[]);var b=$("ordersBox");if(b&&curParts()[0]==="account")b.innerHTML=ordersHtml()})
+    sb.from("orders").select("order_ref,created_at,items,shipping_cents,total_cents,status,tracking_number,tracking_url,carrier,ship_address").order("created_at",{ascending:false}).limit(50)
+      .then(function(r){ordersState=r.error?"error":(r.data||[]);if(curParts()[0]==="account")renderAccount()})
       .catch(function(){ordersState="error";var b=$("ordersBox");if(b)b.innerHTML=ordersHtml()});
   }
   function renderAccount(){
@@ -1064,13 +1119,22 @@ h1[tabindex="-1"]:focus,h2[tabindex="-1"]:focus{outline:none}
     if(sbFailed){el.innerHTML='<div class="banner">We could not load sign-in right now. Please refresh the page. You can still check out as a guest.</div>';return}
     if(sbUser===undefined){el.innerHTML='<p>Loading...</p>';return}
     if(sbUser){
-      el.innerHTML='<div class="acctbar"><p>Signed in as <b>'+esc(sbUser.email||"")+'</b></p><button class="btn ghost" type="button" id="signOut">Sign out</button></div><h2>Your orders</h2><div id="ordersBox">'+ordersHtml()+'</div>'
-        +'<p class="fine">Orders are matched by the email used at checkout. Shipping updates and tracking appear here once your order ships. Questions? <a href="#/contact">Contact us</a>.</p>';
+      var md=sbUser.user_metadata||{},nm=String(md.full_name||md.name||"").trim(),first=nm.split(/\s+/)[0]||"",ini=(nm||sbUser.email||"?").charAt(0).toUpperCase();
+      var cnt=Array.isArray(ordersState)?ordersState.length:null;
+      el.innerHTML='<div class="acctwrap"><header class="hello"><div class="avatar" aria-hidden="true">'+esc(ini)+'</div><div class="hellotxt"><h2>'+(first?'Welcome back, '+esc(first):'Welcome back')+'</h2><p>'+esc(sbUser.email||"")+'</p></div><button class="btn ghost" type="button" id="signOut">Sign out</button></header>'
+        +'<div class="sechead"><h3>Your orders</h3>'+(cnt!==null?'<span class="count">'+cnt+(cnt===1?' order':' orders')+'</span>':'')+'</div>'
+        +'<div id="ordersBox">'+ordersHtml()+'</div>'
+        +'<p class="fine">Orders are matched by the email used at checkout. Tracking appears here once your order ships. Questions? <a href="#/contact">Contact us</a>.</p></div>';
       loadOrders();return;
     }
-    el.innerHTML='<div class="card" style="max-width:30rem"><h3>Sign in</h3><p>Use your Google account to see your order history and tracking. We never see your Google password.</p>'
+    el.innerHTML='<div class="signwrap"><div class="why"><h2>Track your orders</h2><ul class="perks">'
+      +'<li><b>Order history</b><span>See everything you have bought, in one place.</span></li>'
+      +'<li><b>Shipping updates</b><span>Status and tracking links as soon as your order ships.</span></li>'
+      +'<li><b>Faster checkout</b><span>Your email is filled in for you.</span></li></ul>'
+      +'<p class="fine">Accounts are optional. You can always <a href="#/shop">check out as a guest</a>.</p></div>'
+      +'<div class="card signcard"><h3>Sign in</h3><p>Continue with your Google account. We never see your Google password.</p>'
       +'<button class="btn" type="button" id="googleBtn" style="width:100%">Continue with Google</button><div class="note" id="googleNote" role="alert"></div>'
-      +'<p class="fine">To see an order here, use the same email at checkout as your Google account. No account? No problem: you can always <a href="#/shop">check out as a guest</a>.</p></div>';
+      +'<p class="fine">To see an order here, use the same email at checkout as your Google account.</p></div></div>';
   }
   document.addEventListener("click",function(e){
     var b=e.target.closest?e.target.closest("button"):null;if(!b)return;
