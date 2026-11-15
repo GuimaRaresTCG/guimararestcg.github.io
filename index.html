@@ -950,10 +950,11 @@ h1[tabindex="-1"]:focus,h2[tabindex="-1"]:focus{outline:none}
     }
     function success(b){
       var em=form.email.value.trim();
+      var saveNote=b.saveError?'<p class="fine">Test mode note: this order was paid but not saved to accounts. '+esc(String(b.saveError).slice(0,300))+'</p>':"";
       var acctNote=accountsReady()?(sbUser?'<p>This order will appear in your account order history.</p>':'<p>Want to track it? <a href="#/account">Sign in with Google</a> using <b>'+esc(em)+'</b> and this order will show up in your order history.</p>'):"";
       var rec=/^https:\/\//.test(b.receiptUrl||"")?'<p><a href="'+esc(b.receiptUrl)+'" target="_blank" rel="noopener noreferrer">View your receipt</a></p>':"";
       cart={};saveCart();updateBadge();teardownPay();
-      $("checkoutBody").innerHTML='<div class="card"><h2>Thank you! Your order is placed.</h2><p>Order number: <b>'+esc(String(b.orderRef||b.orderId||"").slice(0,40))+'</b></p><p>A receipt is on its way to your email. We will email tracking once your order ships.</p>'+acctNote+rec+'<a class="btn" href="#/shop">Keep shopping</a></div>';
+      $("checkoutBody").innerHTML='<div class="card"><h2>Thank you! Your order is placed.</h2><p>Order number: <b>'+esc(String(b.orderRef||b.orderId||"").slice(0,40))+'</b></p><p>A receipt is on its way to your email. We will email tracking once your order ships.</p>'+acctNote+saveNote+rec+'<a class="btn" href="#/shop">Keep shopping</a></div>';
       window.scrollTo(0,0);
     }
     form.addEventListener("submit",function(e){e.preventDefault();if(ctl.card)submit(function(){return ctl.card.tokenize()})});
