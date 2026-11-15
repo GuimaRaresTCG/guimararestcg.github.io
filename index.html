@@ -676,8 +676,7 @@ h1[tabindex="-1"]:focus,h2[tabindex="-1"]:focus{outline:none}
   function esc(s){return String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;")}
   // ONLINE CHECKOUT SETTINGS (fill these in after Square + Cloudflare setup, see the setup guide).
   // These values are public and safe to be on the website. The secret Square token lives only on the server.
-  var CHECKOUT={env:"sandbox",appId:"sandbox-sq0idb-tcO55DTiJ1x4zdFN11c6pQ",locationId:"L2H9HDJ4QKDP1",api:"guimarares-checkout.guimararestcg.workers.dev
-"};
+  var CHECKOUT={env:"sandbox",appId:"sandbox-sq0idb-tcO55DTiJ1x4zdFN11c6pQ",locationId:"L2H9HDJ4QKDP1",api:"https://guimarares-checkout.guimararestcg.workers.dev"};
   var MAXQTY=10;
   // STOCK: one line per product that is available. Key = product SKU (the product name in lowercase, letters and numbers
   // with dashes between words, no accents). Value = most a customer can buy in one order.
