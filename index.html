@@ -682,7 +682,7 @@ h1[tabindex="-1"]:focus,h2[tabindex="-1"]:focus{outline:none}
   // with dashes between words, no accents). Value = most a customer can buy in one order.
   // A product that is not listed here shows Out of stock. The server (Cloudflare Worker) has its own price list,
   // and prices are always checked there, so changing a price here alone never changes what a customer is charged.
-  var STOCK={/*TEST-START*/"test-item-not-for-sale":5/*TEST-END*/};
+  var STOCK={};
   function slug(s){return String(s).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"")}
   function isInStock(name){return STOCK[slug(name)]>0}
   function card(face,n,c,p){
@@ -727,7 +727,7 @@ h1[tabindex="-1"]:focus,h2[tabindex="-1"]:focus{outline:none}
     bundles:[["Sample booster bundle","Sealed","$24.00"],["Sample booster bundle","Sealed","$27.00"]],
     sealed:[["Sample collection box","Sealed","$39.00"],["Sample starter deck","Sealed","$14.00"],["Sample tin","Sealed","$22.00"]]
   };
-  var TEST_ITEMS=[/*TEST-START*/["TEST ITEM (not for sale)","Near Mint","$1.00"]/*TEST-END*/];
+  var TEST_ITEMS=[];
   function itemsFor(g,sid){return (g.id==="pokemon"&&sid==="singles")?TEST_ITEMS.concat(secData[sid]):secData[sid]}
   function secsFor(g){
     var s=[{id:"singles",n:"Singles"}];
@@ -835,7 +835,7 @@ h1[tabindex="-1"]:focus,h2[tabindex="-1"]:focus{outline:none}
   }
   function renderCart(){
     if(!cartCount()){$("cartBody").innerHTML='<div class="card"><p>Your cart is empty.</p><a class="btn" href="#/shop">Start shopping</a></div>';return}
-    $("cartBody").innerHTML='<div class="cartgrid"><div>'+cartLines(true)+'</div><div class="card"><h3>Summary</h3><div class="row"><span>Subtotal</span><b>'+money(subtotal())+'</b></div><p>Shipping is added at checkout.</p><a class="btn" href="#/checkout" style="display:block;text-align:center">Go to checkout</a></div></div>';
+    $("cartBody").innerHTML='<div class="cartgrid"><div>'+cartLines(true)+'</div><div class="card"><h3>Summary</h3><div class="row"><span>Subtotal</span><b>'+money(subtotal())+'</b></div><p>Shipping is $6 for cards and $10 when an order includes sealed products. <b>Free on orders over $150.</b></p><a class="btn" href="#/checkout" style="display:block;text-align:center">Go to checkout</a></div></div>';
   }
   function orderText(){
     var l=["Hi, I would like to order:"];
@@ -1043,7 +1043,7 @@ h1[tabindex="-1"]:focus,h2[tabindex="-1"]:focus{outline:none}
   }
   renderReviews();
 
-  if(Object.keys(STOCK).some(function(k){return STOCK[k]>0})){var an=document.querySelector(".announce");if(an)an.hidden=true}
+  if(Object.keys(STOCK).some(function(k){return STOCK[k]>0})){var an=document.querySelector(".announce");if(an)an.innerHTML="<span><b>Free shipping on orders over $150</b></span>"}
 
   // router
   var pages=["home","shop","accessories","custom","sell","about","faq","returns","privacy","terms","contact","cart","checkout","account","review"],first=true;
