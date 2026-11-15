@@ -991,7 +991,7 @@ h1[tabindex="-1"]:focus,h2[tabindex="-1"]:focus{outline:none}
   }
   // ---------- customer accounts (Supabase) ----------
   // ACCOUNTS values are public (the "anon"/publishable key is designed to be on a website). Never put a secret key here.
-  var ACCOUNTS={url:"https://supabase.com/dashboard/org/doemunlooitwkympumcp",anonKey:"sb_publishable_-VpeB8_4xIzIw77Oot4JaQ_ZUI5mozr"};
+  var ACCOUNTS={url:"https://xomlgfmasifubkwytmzx.supabase.co",anonKey:"sb_publishable_-VpeB8_4xIzIw77Oot4JaQ_ZUI5mozr"};
   var sb=null,sbUser=null,sbFailed=false,recovery=false,ordersState=null,cameFromLink=/access_token=|type=recovery|type=signup/.test(location.hash);
   function accountsReady(){return /^https:\/\/[a-z0-9-]+\.supabase\.co$/.test(ACCOUNTS.url)&&String(ACCOUNTS.anonKey).length>20}
   function curParts(){return location.hash.replace(/^#\/?/,"").split("/")}
