@@ -131,6 +131,7 @@ select{font:inherit;padding:.7rem .9rem;border-radius:10px;border:1.5px solid va
 .details{align-items:center}
 form[hidden]{display:none}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.ico[hidden]{display:none}
 .ico{position:relative;display:inline-flex;align-items:center;padding:.15rem 0}
 .badge{position:absolute;top:-8px;right:-12px;min-width:18px;height:18px;padding:0 4px;border-radius:9px;background:var(--gold);color:var(--goldink);font-size:.7rem;font-weight:700;display:grid;place-items:center;line-height:1}
 .item .add[disabled]{opacity:.55;cursor:not-allowed;filter:none}
@@ -146,6 +147,16 @@ form[hidden]{display:none}
 .qb:hover{border-color:var(--gold)}
 .linkbtn{background:none;border:0;color:var(--muted);font:inherit;text-decoration:underline;cursor:pointer;padding:0}
 .row{display:flex;justify-content:space-between;padding:.4rem 0}
+.cof{max-width:none;grid-template-columns:1fr 1fr}
+.cof .full{grid-column:1/-1}
+.cof h3{margin:.6rem 0 0}
+.cof label,.cof input,.cof select{min-width:0}
+select{font:inherit;padding:.7rem .9rem;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink)}
+.walletrow{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+.walletrow:not(:empty){margin-bottom:.9rem}
+.walletrow .paybtn{margin-top:0;opacity:1;cursor:pointer;color:var(--ink);border-color:var(--gold)}.walletrow .paybtn:disabled{opacity:.5;cursor:not-allowed}
+#cardBox{min-height:90px}
+@media (max-width:760px){.cof{grid-template-columns:1fr}.cartgrid{grid-template-columns:1fr}}
 .row.total{font-weight:700;font-size:1.1rem;border-top:1px solid var(--line);margin-top:.6rem;padding-top:.8rem}
 .paybtn{display:block;width:100%;margin-top:.6rem;padding:.8rem;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);color:var(--muted);font:inherit;font-weight:700;text-align:center;opacity:.65;cursor:not-allowed}
 @media (max-width:820px){.cartgrid{grid-template-columns:1fr}.line{grid-template-columns:1fr auto}.line .qty{grid-column:1}}
@@ -183,6 +194,11 @@ form[hidden]{display:none}
 .bname{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 @media (max-width:420px){.brand{font-size:.9rem}}
 @media (max-width:380px){.brand img{display:none}}
+.toolbar{display:flex;gap:.7rem;flex-wrap:wrap;align-items:center;margin:0 0 1.2rem}
+.toolbar input[type=search]{flex:1 1 240px;min-width:0}
+.chk{display:flex;align-items:center;gap:.5rem;font-weight:500;white-space:nowrap}
+.chk input{width:auto;padding:0;accent-color:var(--gold)}
+.empty .linkbtn{color:var(--gold2)}
 .back{display:inline-block;margin-top:2rem;color:var(--gold2)}
 .menu li.sub2{position:relative}
 .menu li.sub2>a::after{content:"\203A";float:right;margin-left:.8rem;color:var(--muted)}
@@ -243,7 +259,7 @@ h1[tabindex="-1"]:focus,h2[tabindex="-1"]:focus{outline:none}
         <li><a href="#/contact" data-nav="contact">Contact</a></li>
       </ul>
     </nav>
-    <div class="hicons"><a class="ico" href="#/account" data-nav="account" aria-label="Account"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg></a><a class="ico" href="#/cart" data-nav="cart" id="cartLink" aria-label="Cart, 0 items"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.6 12.2a1 1 0 0 0 1 .8h9.1a1 1 0 0 0 1-.8L20 7H6"/></svg><span class="badge" id="cartCount">0</span></a></div>
+    <div class="hicons"><a class="ico" href="#/account" data-nav="account" hidden aria-label="Account"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg></a><a class="ico" href="#/cart" data-nav="cart" id="cartLink" aria-label="Cart, 0 items"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.6 12.2a1 1 0 0 0 1 .8h9.1a1 1 0 0 0 1-.8L20 7H6"/></svg><span class="badge" id="cartCount">0</span></a></div>
     <button class="menubtn" type="button" id="menuBtn" aria-expanded="false" aria-controls="mainNav" aria-label="Menu"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   </div>
 </header>
@@ -353,7 +369,14 @@ h1[tabindex="-1"]:focus,h2[tabindex="-1"]:focus{outline:none}
   <div class="wrap">
     <div class="pghead"><h1 class="ph" tabindex="-1" id="shopTitle">Shop</h1><p class="sub" id="shopSub"></p></div>
     <div class="subtabs" id="subtabs" role="navigation" aria-label="Shop by game"></div>
-    <div id="shopBody"></div>
+    <div class="toolbar" role="search">
+      <label class="sr" for="shopQ">Search products</label>
+      <input id="shopQ" type="search" placeholder="Search products" autocomplete="off">
+      <label class="sr" for="shopSort">Sort by</label>
+      <select id="shopSort"><option value="featured">Sort: Featured</option><option value="plh">Price: low to high</option><option value="phl">Price: high to low</option><option value="az">Name: A to Z</option></select>
+      <label class="chk"><input type="checkbox" id="shopStock"> In stock only</label>
+    </div>
+    <div id="shopBody" aria-live="polite"></div>
   </div>
 </div>
 
@@ -468,7 +491,7 @@ h1[tabindex="-1"]:focus,h2[tabindex="-1"]:focus{outline:none}
     <div class="doc">
       <details class="qa"><summary>Do you have a physical store?</summary><p>Not at this time currently we are online only.</p></details>
       <details class="qa"><summary>What do you sell?</summary><p>Singles, booster boxes, booster bundles and sealed product for Pokémon, One Piece, Magic: The Gathering, Yu-Gi-Oh!, Riftbound and other popular games. We also sell accessories and custom products.</p></details>
-      <details class="qa"><summary>How do I buy something I see in the shop?</summary><p>Send us a message on the <a href="#/contact">Contact</a> page with what you want, and we will confirm availability and next steps.</p></details>
+      <details class="qa"><summary>How do I buy something I see in the shop?</summary><p>Click <b>Buy now</b> on a product to pay securely through Square. You do not need an account. If something is out of stock, sign up for restock alerts on the <a href="#/home">home page</a>.</p></details>
       <details class="qa"><summary>How do you describe card condition?</summary><p>Each single is listed with a condition such as Near Mint or Lightly Played. If a card does not match its description, see our <a href="#/returns">return and refund policy</a>.</p></details>
       <details class="qa"><summary>Do you buy collections?</summary><p>Yes. Send us a list on the <a href="#/sell">Sell &amp; Trade</a> page, and photos on Instagram if you have them and we will reply with an offer.</p></details>
       <details class="qa"><summary>What is the difference between cash and trade credit?</summary><p>Cash is paid to you for your cards. Trade credit goes toward anything in the shop, and it pays more than cash.</p></details>
@@ -623,7 +646,7 @@ h1[tabindex="-1"]:focus,h2[tabindex="-1"]:focus{outline:none}
     <div><b class="fbrand">GuimaRares &amp; Holos</b><p>We buy, sell and trade trading cards.</p>
       <p>Online only</p>
       <p class="socs">Follow us <a class="soc" href="https://www.instagram.com/guimararestcg/" target="_blank" rel="noopener noreferrer" aria-label="Instagram: @guimararestcg"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r=".7" fill="currentColor"/></svg></a><a class="soc" href="https://www.tiktok.com/@guimararestcg" target="_blank" rel="noopener noreferrer" aria-label="TikTok: @guimararestcg"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3v11.5a3.5 3.5 0 1 1-3.5-3.5"/><path d="M14 3c.4 2.6 2.1 4.3 5 4.6"/></svg></a><a href="https://linktr.ee/guimararestcg" target="_blank" rel="noopener noreferrer">Linktree</a></p></div>
-    <div><b>Help</b><ul><li><a href="#/faq">FAQ</a></li><li><a href="#/returns">Returns &amp; Refunds</a></li><li><a href="#/sell">Sell &amp; Trade</a></li><li><a href="#/contact">Contact</a></li><li><a href="#/account">Account</a></li><li><a href="#/cart">Cart</a></li></ul></div>
+    <div><b>Help</b><ul><li><a href="#/faq">FAQ</a></li><li><a href="#/returns">Returns &amp; Refunds</a></li><li><a href="#/sell">Sell &amp; Trade</a></li><li><a href="#/contact">Contact</a></li></ul></div>
     <div><b>Company</b><ul><li><a href="#/about">About Us</a></li><li><a href="#/privacy">Privacy Policy</a></li><li><a href="#/terms">Terms of Service</a></li></ul></div>
   </div>
   <div class="wrap copy">© 2026 GuimaRares &amp; Holos. Not affiliated with any game publisher. All card names belong to their owners.</div>
@@ -651,15 +674,28 @@ h1[tabindex="-1"]:focus,h2[tabindex="-1"]:focus{outline:none}
   function $(id){return document.getElementById(id)}
   var catalog={};
   function esc(s){return String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;")}
-  var IN_STOCK=false; // set to true when products are available to buy
+  // ONLINE CHECKOUT SETTINGS (fill these in after Square + Cloudflare setup, see the setup guide).
+  // These values are public and safe to be on the website. The secret Square token lives only on the server.
+  var CHECKOUT={env:"sandbox",appId:"",locationId:"",api:""};
+  var MAXQTY=10;
+  // STOCK: one line per product that is available. Key = product SKU (the product name in lowercase, letters and numbers
+  // with dashes between words, no accents). Value = most a customer can buy in one order.
+  // A product that is not listed here shows Out of stock. The server (Cloudflare Worker) has its own price list,
+  // and prices are always checked there, so changing a price here alone never changes what a customer is charged.
+  var STOCK={/*TEST-START*/"test-item-not-for-sale":5/*TEST-END*/};
+  function slug(s){return String(s).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"")}
+  function isInStock(name){return STOCK[slug(name)]>0}
   function card(face,n,c,p){
-    var key=face+"|"+n+"|"+c+"|"+p;catalog[key]={face:face,n:n,c:c,p:p};
-    var priced=/^\$/.test(p),act,price;
-    if(priced&&!IN_STOCK){
+    var priced=/^\$/.test(p),sku=slug(n),act,price;
+    if(priced&&STOCK[sku]>0){
+      catalog[sku]={sku:sku,face:face,n:n,c:c,p:p};
+      act='<button class="btn add" type="button" data-k="'+esc(sku)+'">Add to cart</button>';
+      price='<div class="price">'+p+'</div>';
+    }else if(priced){
       act='<button class="btn add" type="button" disabled aria-disabled="true">Out of stock</button>';
       price='<div class="price oos">Out of stock</div>';
     }else{
-      act=priced?'<button class="btn add" type="button" data-k="'+esc(key)+'">Add to cart</button>':'<a class="btn ghost add" href="#/custom">Request a quote</a>';
+      act='<a class="btn ghost add" href="#/custom">Request a quote</a>';
       price='<div class="price">'+p+'</div>';
     }
     return '<article class="item"><div class="face">'+face+'</div><h3>'+n+'</h3><p>'+c+'</p>'+price+act+'</article>';
@@ -691,37 +727,84 @@ h1[tabindex="-1"]:focus,h2[tabindex="-1"]:focus{outline:none}
     bundles:[["Sample booster bundle","Sealed","$24.00"],["Sample booster bundle","Sealed","$27.00"]],
     sealed:[["Sample collection box","Sealed","$39.00"],["Sample starter deck","Sealed","$14.00"],["Sample tin","Sealed","$22.00"]]
   };
+  var TEST_ITEMS=[/*TEST-START*/["TEST ITEM (not for sale)","Near Mint","$1.00"]/*TEST-END*/];
+  function itemsFor(g,sid){return (g.id==="pokemon"&&sid==="singles")?TEST_ITEMS.concat(secData[sid]):secData[sid]}
   function secsFor(g){
     var s=[{id:"singles",n:"Singles"}];
     if(g.id==="pokemon")s.push({id:"etb",n:"ETBs (Elite Trainer Boxes)"});
     s.push({id:"boxes",n:"Booster Boxes"},{id:"bundles",n:"Booster Bundles"},{id:"sealed",n:"Sealed Products"});
     return s;
   }
+  var shopState={q:"",sort:"featured",stock:false},curGame=null,curSec=null;
+  function allProducts(gs){
+    var list=[];
+    gs.forEach(function(g){secsFor(g).forEach(function(s){itemsFor(g,s.id).forEach(function(x){
+      list.push({g:g,s:s,n:x[0],c:x[1],p:x[2],price:parseFloat(x[2].replace(/[^0-9.]/g,""))||0});
+    })})});
+    return list;
+  }
+  function shopActive(){return !!shopState.q||shopState.sort!=="featured"||shopState.stock}
+  function secTabs(g,one){
+    var secs=secsFor(g);
+    return '<div class="subtabs" role="navigation" aria-label="'+g.n+' sections"><a href="#/shop/'+g.id+'"'+(!one?' aria-current="page"':'')+'>Everything</a>'+secs.map(function(s){
+      return '<a href="#/shop/'+g.id+'/'+s.id+'"'+(one&&one.id===s.id?' aria-current="page"':'')+'>'+s.n+'</a>'}).join("")+'</div>';
+  }
+  function results(g,one){
+    var list=allProducts(g?[g]:games);
+    if(one)list=list.filter(function(x){return x.s.id===one.id});
+    var words=shopState.q.toLowerCase().split(/\s+/).filter(Boolean);
+    list=list.filter(function(x){
+      var hay=(x.n+" "+x.c+" "+x.g.n+" "+x.s.n).toLowerCase();
+      return words.every(function(w){return hay.indexOf(w)>-1});
+    });
+    if(shopState.stock)list=list.filter(function(x){return isInStock(x.n)});
+    var so=shopState.sort;
+    if(so==="plh")list.sort(function(a,b){return a.price-b.price});
+    else if(so==="phl")list.sort(function(a,b){return b.price-a.price});
+    else if(so==="az")list.sort(function(a,b){return a.n.localeCompare(b.n)});
+    if(!list.length){
+      return (shopState.stock)
+        ?'<p class="empty">Nothing matching is in stock right now. <button class="linkbtn" type="button" data-goto="restock">Get restock alerts</button></p>'
+        :'<p class="empty">No products match your search. Try different words, or <a href="#/contact">ask us to find it</a>.</p>';
+    }
+    return '<h2 class="grp">'+list.length+(list.length===1?' result':' results')+'</h2><div class="grid">'+list.map(function(x){return card(x.g.n,x.n,x.c,x.p)}).join("")+'</div>';
+  }
+  function renderShopBody(){
+    var g=curGame,one=null;
+    if(g){var secs=secsFor(g);for(var i=0;i<secs.length;i++)if(secs[i].id===curSec)one=secs[i]}
+    var html;
+    if(!g){
+      html=shopActive()?results(null,null):'<div class="tiles">'+games.map(function(x){return '<a class="tile" href="#/shop/'+x.id+'"><b>'+x.n+'</b><span>Singles &amp; sealed</span></a>'}).join("")+'</div>';
+    }else if(shopActive()){
+      html=secTabs(g,one)+results(g,one);
+    }else{
+      var show=one?[one]:secsFor(g);
+      html=secTabs(g,one)+show.map(function(s){
+        return '<h2 class="grp">'+s.n+'</h2><div class="grid">'+itemsFor(g,s.id).map(function(x){return card(g.n,x[0],x[1],x[2])}).join("")+'</div>';
+      }).join("");
+    }
+    $("shopBody").innerHTML=html+(g||shopActive()?'<a class="back" href="#/contact">Cannot find what you want? Ask us for it.</a>':'');
+  }
   function renderShop(sub,sec){
     var g=sub?gameById(sub):null;
-    var tabs='<a href="#/shop"'+(!g?' aria-current="page"':'')+'>All products</a>'+games.map(function(x){
+    curGame=g;curSec=sec||null;
+    $("subtabs").innerHTML='<a href="#/shop"'+(!g?' aria-current="page"':'')+'>All products</a>'+games.map(function(x){
       return '<a href="#/shop/'+x.id+'"'+(g&&g.id===x.id?' aria-current="page"':'')+'>'+x.n+'</a>'}).join("");
-    $("subtabs").innerHTML=tabs;
     if(!g){
       $("shopTitle").textContent="Shop";
-      $("shopSub").textContent="Choose a game to see singles, booster boxes, bundles and sealed product.";
-      $("shopBody").innerHTML='<div class="tiles">'+games.map(function(x){return '<a class="tile" href="#/shop/'+x.id+'"><b>'+x.n+'</b><span>Singles &amp; sealed</span></a>'}).join("")+'</div>';
+      $("shopSub").textContent="Choose a game, or search everything we carry.";
     }else{
-      var secs=secsFor(g),one=null;
-      for(var i=0;i<secs.length;i++)if(secs[i].id===sec)one=secs[i];
       $("shopTitle").textContent=g.n;
       $("shopSub").textContent="Sample listings to show the layout. Send me your real inventory and prices and I will swap them in.";
-      var st='<div class="subtabs" role="navigation" aria-label="'+g.n+' sections"><a href="#/shop/'+g.id+'"'+(!one?' aria-current="page"':'')+'>Everything</a>'+secs.map(function(s){
-        return '<a href="#/shop/'+g.id+'/'+s.id+'"'+(one&&one.id===s.id?' aria-current="page"':'')+'>'+s.n+'</a>'}).join("")+'</div>';
-      var show=one?[one]:secs;
-      var html=show.map(function(s){
-        return '<h2 class="grp">'+s.n+'</h2><div class="grid">'+secData[s.id].map(function(x){return card(g.n,x[0],x[1],x[2])}).join("")+'</div>';
-      }).join("");
-      $("shopBody").innerHTML=st+html+'<a class="back" href="#/contact">Cannot find what you want? Ask us for it.</a>';
     }
+    $("shopQ").placeholder=g?"Search "+g.n:"Search all products";
+    renderShopBody();
     var cur=document.querySelector('#subtabs [aria-current]');
     if(cur&&cur.scrollIntoView)cur.scrollIntoView({block:"nearest",inline:"center"});
   }
+  $("shopQ").addEventListener("input",function(){shopState.q=this.value.trim();renderShopBody()});
+  $("shopSort").addEventListener("change",function(){shopState.sort=this.value;renderShopBody()});
+  $("shopStock").addEventListener("change",function(){shopState.stock=this.checked;renderShopBody()});
 
   // custom products
   var custom=[
@@ -735,7 +818,7 @@ h1[tabindex="-1"]:focus,h2[tabindex="-1"]:focus{outline:none}
 
   // cart
   var cart={};
-  try{var raw=JSON.parse(localStorage.getItem("gh_cart")||"{}");for(var k in raw){var it=raw[k];if(it&&it.item&&typeof it.item.p==="string"&&it.qty>0)cart[k]={item:{face:String(it.item.face),n:String(it.item.n),c:String(it.item.c),p:it.item.p},qty:Math.min(99,Math.floor(it.qty))}}}catch(e){cart={}}
+  try{var raw=JSON.parse(localStorage.getItem("gh_cart")||"{}");for(var k in raw){var it=raw[k];if(it&&it.item&&typeof it.item.sku==="string"&&STOCK[it.item.sku]>0&&typeof it.item.p==="string"&&it.qty>0){cart[k]={item:{sku:it.item.sku,face:String(it.item.face),n:String(it.item.n),c:String(it.item.c),p:it.item.p},qty:Math.min(MAXQTY,STOCK[it.item.sku],Math.floor(it.qty))}}}}catch(e){cart={}}
   function saveCart(){try{localStorage.setItem("gh_cart",JSON.stringify(cart))}catch(e){}}
   function money(n){return "$"+n.toFixed(2)}
   function priceOf(p){return parseFloat(String(p).replace(/[^0-9.]/g,""))||0}
@@ -752,21 +835,158 @@ h1[tabindex="-1"]:focus,h2[tabindex="-1"]:focus{outline:none}
   }
   function renderCart(){
     if(!cartCount()){$("cartBody").innerHTML='<div class="card"><p>Your cart is empty.</p><a class="btn" href="#/shop">Start shopping</a></div>';return}
-    $("cartBody").innerHTML='<div class="cartgrid"><div>'+cartLines(true)+'</div><div class="card"><h3>Summary</h3><div class="row"><span>Subtotal</span><b>'+money(subtotal())+'</b></div><p>Shipping and tax are added at checkout.</p><a class="btn" href="#/checkout" style="display:block;text-align:center">Go to checkout</a></div></div>';
+    $("cartBody").innerHTML='<div class="cartgrid"><div>'+cartLines(true)+'</div><div class="card"><h3>Summary</h3><div class="row"><span>Subtotal</span><b>'+money(subtotal())+'</b></div><p>Shipping is added at checkout.</p><a class="btn" href="#/checkout" style="display:block;text-align:center">Go to checkout</a></div></div>';
   }
   function orderText(){
     var l=["Hi, I would like to order:"];
     Object.keys(cart).forEach(function(k){var e=cart[k];l.push("- "+e.qty+" x "+e.item.n+" ("+e.item.face+", "+e.item.c+") at "+e.item.p+" each")});
     l.push("Subtotal: "+money(subtotal()));return l.join("\n");
   }
+  // ---------- embedded Square checkout ----------
+  var STATES=["AL","AK","AZ","AR","CA","CO","CT","DE","DC","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"];
+  var payCtl=null,sqPromise=null;
+  function checkoutReady(){return !!(CHECKOUT.appId&&CHECKOUT.locationId&&/^https:\/\//.test(CHECKOUT.api))}
+  function loadSquare(){
+    if(window.Square)return Promise.resolve();
+    if(sqPromise)return sqPromise;
+    sqPromise=new Promise(function(res,rej){
+      var s=document.createElement("script");
+      s.src=CHECKOUT.env==="production"?"https://web.squarecdn.com/v1/square.js":"https://sandbox.web.squarecdn.com/v1/square.js";
+      s.onload=res;s.onerror=function(){sqPromise=null;rej(new Error("load"))};document.head.appendChild(s);
+    });
+    return sqPromise;
+  }
+  function post(path,body){
+    return fetch(CHECKOUT.api.replace(/\/+$/,"")+path,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)})
+      .then(function(r){return r.json().catch(function(){return {}}).then(function(j){return {status:r.status,body:j}})});
+  }
+  function teardownPay(){
+    if(!payCtl)return;var c=payCtl;payCtl=null;c.dead=true;
+    ["card","gpay","apay"].forEach(function(k){try{if(c[k]&&c[k].destroy)c[k].destroy()}catch(e){}});
+  }
+  function itemsPayload(){return Object.keys(cart).map(function(k){return {sku:cart[k].item.sku,qty:cart[k].qty}})}
+  function cents(n){return money((n||0)/100)}
+  function uuid(){
+    if(window.crypto&&crypto.randomUUID)return crypto.randomUUID();
+    return "k"+Date.now().toString(36)+Math.random().toString(36).slice(2,12);
+  }
+  function summaryHtml(q){
+    var r='<div class="row"><span>Subtotal</span><span>'+(q?cents(q.subtotalCents):money(subtotal()))+'</span></div>';
+    if(q){
+      r+='<div class="row"><span>Shipping</span><span>'+(q.shippingCents?cents(q.shippingCents):"Free")+'</span></div>';
+      r+='<div class="row total"><span>Total</span><span>'+cents(q.totalCents)+'</span></div>';
+    }else r+='<p class="fine">Shipping is shown once the total is calculated.</p>';
+    return r;
+  }
   function renderCheckout(){
+    teardownPay();
     if(!cartCount()){$("checkoutBody").innerHTML='<div class="card"><p>Your cart is empty.</p><a class="btn" href="#/shop">Start shopping</a></div>';return}
-    $("checkoutBody").innerHTML='<div class="banner">Online checkout is coming soon. To order now, message us your cart and we will confirm availability and next steps.</div>'
-      +'<div class="cartgrid"><div>'+cartLines(false)+'</div><div class="card"><h3>Order summary</h3><div class="row total"><span>Subtotal</span><span>'+money(subtotal())+'</span></div>'
-      +'<button class="btn" type="button" id="msgOrder" style="width:100%;margin-top:1rem">Message us this order</button>'
-      +'<p style="margin-top:1.2rem"><b>Online payment, coming soon</b></p>'
-      +'<button class="paybtn" type="button" aria-disabled="true" disabled>Apple Pay</button><button class="paybtn" type="button" aria-disabled="true" disabled>PayPal</button><button class="paybtn" type="button" aria-disabled="true" disabled>Shop Pay</button><button class="paybtn" type="button" aria-disabled="true" disabled>Credit or debit card</button>'
-      +'<p style="margin-top:1rem;font-size:.9rem">When online checkout opens, payments will be processed by a third-party payment provider and we will not store your card details.</p></div></div>';
+    if(!checkoutReady()){
+      $("checkoutBody").innerHTML='<div class="banner">Online checkout is not connected yet. To order now, message us your cart and we will confirm availability and next steps.</div>'
+        +'<div class="cartgrid"><div>'+cartLines(false)+'</div><div class="card"><h3>Order summary</h3>'+summaryHtml(null)
+        +'<button class="btn" type="button" id="msgOrder" style="width:100%;margin-top:1rem">Message us this order</button></div></div>';
+      return;
+    }
+    var opts='<option value="">State</option>'+STATES.map(function(s){return '<option>'+s+'</option>'}).join("");
+    $("checkoutBody").innerHTML='<div class="cartgrid"><div>'
+      +'<form id="coForm" class="cof" novalidate>'
+      +'<h3 class="full">Contact</h3>'
+      +'<label>Email<input name="email" type="email" required autocomplete="email"></label>'
+      +'<label>Phone (optional)<input name="phone" type="tel" autocomplete="tel"></label>'
+      +'<h3 class="full">Ship to (United States)</h3>'
+      +'<label class="full">Full name<input name="name" required autocomplete="name"></label>'
+      +'<label class="full">Address<input name="line1" required autocomplete="address-line1"></label>'
+      +'<label class="full">Apartment, suite (optional)<input name="line2" autocomplete="address-line2"></label>'
+      +'<label>City<input name="city" required autocomplete="address-level2"></label>'
+      +'<label>State<select name="state" required autocomplete="address-level1">'+opts+'</select></label>'
+      +'<label>ZIP code<input name="zip" required inputmode="numeric" pattern="[0-9]{5}(-[0-9]{4})?" autocomplete="postal-code"></label>'
+      +'<h3 class="full">Payment</h3>'
+      +'<div class="full"><div id="walletRow" class="walletrow"></div><div id="cardBox" aria-label="Card details"></div></div>'
+      +'<div class="full"><button class="btn" type="submit" id="payBtn" disabled style="width:100%">Loading secure payment form...</button>'
+      +'<div class="note" id="payNote" role="alert"></div>'
+      +'<p class="fine">Payments are processed by Square. Your card details go straight to Square and are never stored on our site.</p></div>'
+      +'</form></div>'
+      +'<div class="card"><h3>Order summary</h3>'+cartLines(false)+'<div id="sumBox">'+summaryHtml(null)+'</div></div></div>';
+    var ctl=payCtl={dead:false,quote:null,busy:false};
+    var form=$("coForm"),note=$("payNote"),payBtn=$("payBtn");
+    function say(m){note.textContent=m||""}
+    function setQuote(q){ctl.quote=q;$("sumBox").innerHTML=summaryHtml(q)}
+    function getQuote(){
+      post("/quote",{items:itemsPayload(),state:form.state.value||""}).then(function(r){
+        if(ctl.dead)return;
+        if(r.status===200&&r.body&&r.body.totalCents>0)setQuote(r.body);
+        else say((r.body&&r.body.message)||"We could not calculate your total. Please refresh and try again.");
+      }).catch(function(){if(!ctl.dead)say("We could not reach checkout. Check your connection and try again.")});
+    }
+    getQuote();
+    form.state.addEventListener("change",getQuote);
+    function buyer(){return {email:form.email.value.trim(),phone:form.phone.value.trim(),name:form.name.value.trim(),
+      address:{line1:form.line1.value.trim(),line2:form.line2.value.trim(),city:form.city.value.trim(),state:form.state.value,zip:form.zip.value.trim()}}}
+    function setBusy(b){ctl.busy=b;payBtn.disabled=b||!ctl.cardReady;var w=document.querySelectorAll("#walletRow button");for(var i=0;i<w.length;i++)w[i].disabled=b;
+      payBtn.textContent=b?"Processing...":"Pay now"}
+    function submit(tokenize){
+      if(ctl.busy||ctl.dead)return;
+      say("");
+      if(!form.checkValidity()){form.reportValidity();return}
+      if(!ctl.quote){say("Still calculating your total. Try again in a moment.");return}
+      setBusy(true);
+      tokenize().then(function(res){
+        if(!res||res.status!=="OK"){
+          var m=res&&res.errors&&res.errors[0]&&res.errors[0].message;
+          throw {user:m||"We could not read that payment method. Please check it and try again."};
+        }
+        return post("/pay",{token:res.token,items:itemsPayload(),buyer:buyer(),expectedTotalCents:ctl.quote.totalCents,idempotencyKey:uuid()});
+      }).then(function(r){
+        if(ctl.dead)return;
+        var b=r.body||{};
+        if(r.status===200&&b.ok){return success(b)}
+        if(b.code==="totals_changed"&&b.quote){setQuote(b.quote);throw {user:"Your total changed to "+cents(b.quote.totalCents)+". Nothing was charged. Please review and press Pay again."}}
+        throw {user:b.message||"Payment did not go through. You were not charged."};
+      }).catch(function(e){
+        if(ctl.dead)return;
+        say(e&&e.user?e.user:"Something went wrong. You were not charged. Please try again.");
+        setBusy(false);
+      });
+    }
+    function success(b){
+      var rec=/^https:\/\//.test(b.receiptUrl||"")?'<p><a href="'+esc(b.receiptUrl)+'" target="_blank" rel="noopener noreferrer">View your receipt</a></p>':"";
+      cart={};saveCart();updateBadge();teardownPay();
+      $("checkoutBody").innerHTML='<div class="card"><h2>Thank you! Your order is placed.</h2><p>Order number: <b>'+esc(String(b.orderRef||b.orderId||"").slice(0,40))+'</b></p><p>A receipt is on its way to your email. We will email tracking once your order ships.</p>'+rec+'<a class="btn" href="#/shop">Keep shopping</a></div>';
+      window.scrollTo(0,0);
+    }
+    form.addEventListener("submit",function(e){e.preventDefault();if(ctl.card)submit(function(){return ctl.card.tokenize()})});
+    loadSquare().then(function(){
+      if(ctl.dead)return;
+      var payments=Square.payments(CHECKOUT.appId,CHECKOUT.locationId);
+      return payments.card({style:{".input-container":{borderColor:"#4b4235",borderRadius:"10px"},".input-container.is-focus":{borderColor:"#e8b931"},".input-container.is-error":{borderColor:"#ff8a80"},input:{backgroundColor:"#2b2723",color:"#f5efe0"},"input::placeholder":{color:"#cdc3a8"},".message-text":{color:"#cdc3a8"},".message-icon":{color:"#cdc3a8"}}})
+        .then(function(card){
+          if(ctl.dead){try{card.destroy()}catch(e){}return}
+          return card.attach("#cardBox").then(function(){
+            if(ctl.dead){try{card.destroy()}catch(e){}return}
+            ctl.card=card;ctl.cardReady=true;payBtn.disabled=false;payBtn.textContent="Pay now";
+            // wallets are optional: any failure here just hides them
+            var req=function(){return payments.paymentRequest({countryCode:"US",currencyCode:"USD",total:{amount:(ctl.quote?ctl.quote.totalCents/100:subtotal()).toFixed(2),label:"GuimaRares & Holos"}})};
+            [["googlePay","gpay","Google Pay"],["applePay","apay","Apple Pay"]].forEach(function(w){
+              try{
+                Promise.resolve(payments[w[0]](req())).then(function(m){
+                  if(ctl.dead){try{m.destroy&&m.destroy()}catch(e){}return}
+                  ctl[w[1]]=m;
+                  var bt=document.createElement("button");bt.type="button";bt.className="paybtn";bt.textContent=w[2];
+                  bt.addEventListener("click",function(){
+                    if(!ctl.quote){say("Still calculating your total. Try again in a moment.");return}
+                    submit(function(){return m.tokenize()});
+                  });
+                  $("walletRow").appendChild(bt);
+                }).catch(function(){});
+              }catch(e){}
+            });
+          });
+        });
+    }).catch(function(){
+      if(ctl.dead)return;
+      payBtn.textContent="Payment form unavailable";
+      say("We could not load the secure payment form. Please refresh, or message us your order.");
+    });
   }
   function renderAccount(sub){
     var create=sub==="create";
@@ -778,13 +998,13 @@ h1[tabindex="-1"]:focus,h2[tabindex="-1"]:focus{outline:none}
     var b=e.target.closest?e.target.closest("button"):null;if(!b)return;
     var k=b.getAttribute("data-k");
     if(b.classList.contains("add")&&k&&catalog[k]){
-      if(cart[k]){cart[k].qty=Math.min(99,cart[k].qty+1)}else{cart[k]={item:catalog[k],qty:1}}
+      var mx=Math.min(MAXQTY,STOCK[k]||0);if(cart[k]){cart[k].qty=Math.min(mx,cart[k].qty+1)}else{cart[k]={item:catalog[k],qty:1}}
       saveCart();updateBadge();$("cartLive").textContent="Added "+catalog[k].n+" to cart";
       var old=b.textContent;b.textContent="Added";setTimeout(function(){b.textContent=old},1200);return;
     }
     var act=b.getAttribute("data-act");
     if(act&&k&&cart[k]){
-      if(act==="inc")cart[k].qty=Math.min(99,cart[k].qty+1);
+      if(act==="inc")cart[k].qty=Math.min(MAXQTY,STOCK[k]||1,cart[k].qty+1);
       if(act==="dec")cart[k].qty-=1;
       if(act==="rm"||cart[k].qty<1)delete cart[k];
       saveCart();updateBadge();renderCart();return;
@@ -823,6 +1043,8 @@ h1[tabindex="-1"]:focus,h2[tabindex="-1"]:focus{outline:none}
   }
   renderReviews();
 
+  if(Object.keys(STOCK).some(function(k){return STOCK[k]>0})){var an=document.querySelector(".announce");if(an)an.hidden=true}
+
   // router
   var pages=["home","shop","accessories","custom","sell","about","faq","returns","privacy","terms","contact","cart","checkout","account","review"],first=true;
   function route(){
@@ -835,7 +1057,7 @@ h1[tabindex="-1"]:focus,h2[tabindex="-1"]:focus{outline:none}
       if(links[i].getAttribute("data-nav")===navKey)links[i].setAttribute("aria-current","page");else links[i].removeAttribute("aria-current");
     }
     if(page==="shop")renderShop(parts[1],parts[2]);
-    if(page==="cart")renderCart();if(page==="checkout")renderCheckout();if(page==="account")renderAccount(parts[1]);
+    if(page!=="checkout")teardownPay();if(page==="cart")renderCart();if(page==="checkout")renderCheckout();if(page==="account")renderAccount(parts[1]);
     var t=$("pg-"+page).getAttribute("data-title");
     document.title=(page==="home"?"GuimaRares & Holos – TCG buy, sell, trade":t.replace("&amp;","&")+" – GuimaRares & Holos");
     window.scrollTo(0,0);
