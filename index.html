@@ -152,6 +152,7 @@ form[hidden]{display:none}
 .cof h3{margin:.6rem 0 0}
 .cof label,.cof input,.cof select{min-width:0}
 select{font:inherit;padding:.7rem .9rem;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink)}
+#acctBody{padding-bottom:2.5rem}
 .acctbar{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1.5rem}
 .acctbar p{margin:0}
 .ordlist{display:grid;gap:1rem;max-width:44rem}
@@ -548,7 +549,7 @@ h1[tabindex="-1"]:focus,h2[tabindex="-1"]:focus{outline:none}
       <h2>Information we collect</h2>
       <p>We collect what you give us: your name, email address, messages, details about cards you want to sell or trade, and any photos you send us for a custom product request. If we offer online payment, your payment is handled by a third-party payment processor, and we do not store your full card number. We may also collect basic technical data, such as your browser type and pages visited, if we use analytics.</p>
       <h2>Accounts and order history</h2>
-      <p>You never need an account to buy from us. If you choose to create one, we store your name, email address and your order history (items, totals, shipping address, status and tracking number) so you can view your orders. Sign-in is provided by a third-party service, Supabase, which stores your login details securely. You can ask us to delete your account and the data tied to it through our <a href="#/contact">Contact</a> page, except where we must keep records for tax or legal reasons.</p>
+      <p>You never need an account to buy from us. If you choose to sign in with Google, we receive your name and email address from Google (never your Google password) and store them with your order history (items, totals, shipping address, status and tracking number) so you can view your orders. Sign-in is provided by third-party services, Google and Supabase. You can ask us to delete your account and the data tied to it through our <a href="#/contact">Contact</a> page, except where we must keep records for tax or legal reasons.</p>
       <h2>How we use it</h2>
       <p>We use your information to reply to you, prepare offers and quotes, process and ship orders, handle returns, and improve the site. We send marketing emails only if you ask to receive them, and every such email will include a way to unsubscribe.</p>
       <h2>Who we share it with</h2>
@@ -632,7 +633,7 @@ h1[tabindex="-1"]:focus,h2[tabindex="-1"]:focus{outline:none}
 
 <div class="pg" id="pg-account" data-title="Account" hidden>
   <div class="wrap">
-    <div class="pghead"><h1 class="ph" tabindex="-1">Account</h1><p class="sub">Optional. You can always check out as a guest. An account lets you see your order history and tracking.</p></div>
+    <div class="pghead"><h1 class="ph" tabindex="-1">Account</h1><p class="sub">Optional. You can always check out as a guest. Signing in with Google lets you see your order history and tracking.</p></div>
     <div id="acctBody"></div>
   </div>
 </div>
@@ -887,7 +888,7 @@ h1[tabindex="-1"]:focus,h2[tabindex="-1"]:focus{outline:none}
     var opts='<option value="">State</option>'+STATES.map(function(s){return '<option>'+s+'</option>'}).join("");
     $("checkoutBody").innerHTML='<div class="cartgrid"><div>'
       +'<form id="coForm" class="cof" novalidate>'
-      +(accountsReady()&&sbUser===null?'<p class="full fine">Have an account? <a href="#/account">Sign in</a> to track this order, or just continue as a guest.</p>':'')
+      +(accountsReady()&&sbUser===null?'<p class="full fine">Have an account? <a href="#/account">Sign in with Google</a> to track this order, or just continue as a guest.</p>':'')
       +'<h3 class="full">Contact</h3>'
       +'<label>Email<input name="email" type="email" required autocomplete="email"></label>'
       +'<label>Phone (optional)<input name="phone" type="tel" autocomplete="tel"></label>'
@@ -949,7 +950,7 @@ h1[tabindex="-1"]:focus,h2[tabindex="-1"]:focus{outline:none}
     }
     function success(b){
       var em=form.email.value.trim();
-      var acctNote=accountsReady()?(sbUser?'<p>This order will appear in your account order history.</p>':'<p>Want to track it? <a href="#/account/create">Create an account</a> with <b>'+esc(em)+'</b> and this order will show up in your order history.</p>'):"";
+      var acctNote=accountsReady()?(sbUser?'<p>This order will appear in your account order history.</p>':'<p>Want to track it? <a href="#/account">Sign in with Google</a> using <b>'+esc(em)+'</b> and this order will show up in your order history.</p>'):"";
       var rec=/^https:\/\//.test(b.receiptUrl||"")?'<p><a href="'+esc(b.receiptUrl)+'" target="_blank" rel="noopener noreferrer">View your receipt</a></p>':"";
       cart={};saveCart();updateBadge();teardownPay();
       $("checkoutBody").innerHTML='<div class="card"><h2>Thank you! Your order is placed.</h2><p>Order number: <b>'+esc(String(b.orderRef||b.orderId||"").slice(0,40))+'</b></p><p>A receipt is on its way to your email. We will email tracking once your order ships.</p>'+acctNote+rec+'<a class="btn" href="#/shop">Keep shopping</a></div>';
@@ -992,7 +993,7 @@ h1[tabindex="-1"]:focus,h2[tabindex="-1"]:focus{outline:none}
   // ---------- customer accounts (Supabase) ----------
   // ACCOUNTS values are public (the "anon"/publishable key is designed to be on a website). Never put a secret key here.
   var ACCOUNTS={url:"https://xomlgfmasifubkwytmzx.supabase.co",anonKey:"sb_publishable_-VpeB8_4xIzIw77Oot4JaQ_ZUI5mozr"};
-  var sb=null,sbUser=null,sbFailed=false,recovery=false,ordersState=null,cameFromLink=/access_token=|type=recovery|type=signup/.test(location.hash);
+  var sb=null,sbUser=null,sbFailed=false,ordersState=null,cameFromLink=/access_token=/.test(location.hash);
   function accountsReady(){return /^https:\/\/[a-z0-9-]+\.supabase\.co$/.test(ACCOUNTS.url)&&String(ACCOUNTS.anonKey).length>20}
   function curParts(){return location.hash.replace(/^#\/?/,"").split("/")}
   function redirectUrl(){return location.origin+location.pathname}
@@ -1017,9 +1018,7 @@ h1[tabindex="-1"]:focus,h2[tabindex="-1"]:focus{outline:none}
     loadSb().then(function(c){
       c.auth.onAuthStateChange(function(ev,session){
         sbUser=session?session.user:null;ordersState=null;
-        if(ev==="PASSWORD_RECOVERY"){recovery=true;location.hash="#/account/reset"}
-        else if(ev==="SIGNED_IN"&&cameFromLink&&!recovery){cameFromLink=false;location.hash="#/account"}
-        if(ev==="SIGNED_OUT")recovery=false;
+        if(ev==="SIGNED_IN"&&cameFromLink){cameFromLink=false;location.hash="#/account"}
         refreshAcctViews();
       });
       return c.auth.getSession();
@@ -1027,14 +1026,6 @@ h1[tabindex="-1"]:focus,h2[tabindex="-1"]:focus{outline:none}
       if(sbUser===undefined)sbUser=(r&&r.data&&r.data.session)?r.data.session.user:null;
       refreshAcctViews();
     }).catch(function(){sbUser=null;sbFailed=true;refreshAcctViews()});
-  }
-  function authError(e){
-    var m=String(e&&e.message||"").toLowerCase();
-    if(m.indexOf("invalid login")>-1)return "Email or password is incorrect.";
-    if(m.indexOf("not confirmed")>-1)return "Please confirm your email first. Check your inbox for our message.";
-    if(m.indexOf("rate")>-1||m.indexOf("seconds")>-1)return "Too many tries. Please wait a minute and try again.";
-    if(m.indexOf("password")>-1)return "That password is not allowed. Use at least 8 characters.";
-    return "Something went wrong. Please try again.";
   }
   var STATUS_LABEL={processing:"Processing",shipped:"Shipped",delivered:"Delivered",cancelled:"Cancelled",refunded:"Refunded"};
   function trackUrl(o){
@@ -1066,69 +1057,20 @@ h1[tabindex="-1"]:focus,h2[tabindex="-1"]:focus{outline:none}
       .then(function(r){ordersState=r.error?"error":(r.data||[]);var b=$("ordersBox");if(b&&curParts()[0]==="account")b.innerHTML=ordersHtml()})
       .catch(function(){ordersState="error";var b=$("ordersBox");if(b)b.innerHTML=ordersHtml()});
   }
-  function renderAccount(sub){
+  function renderAccount(){
     var el=$("acctBody");
     if(!accountsReady()){el.innerHTML='<div class="banner">Accounts are not open yet. You do not need one to order. Just check out as a guest.</div><a class="btn" href="#/shop">Start shopping</a>';return}
-    if(sbFailed){el.innerHTML='<div class="banner">We could not load accounts right now. Please refresh the page. You can still check out as a guest.</div>';return}
+    if(sbFailed){el.innerHTML='<div class="banner">We could not load sign-in right now. Please refresh the page. You can still check out as a guest.</div>';return}
     if(sbUser===undefined){el.innerHTML='<p>Loading...</p>';return}
-    if(recovery&&sbUser){
-      el.innerHTML='<h2>Choose a new password</h2><form data-auth="reset"><label>New password<input name="password" type="password" required minlength="8" autocomplete="new-password"></label><label>Confirm new password<input name="confirm" type="password" required minlength="8" autocomplete="new-password"></label><button class="btn" type="submit">Save password</button><div class="note" role="status"></div></form>';return;
-    }
     if(sbUser){
       el.innerHTML='<div class="acctbar"><p>Signed in as <b>'+esc(sbUser.email||"")+'</b></p><button class="btn ghost" type="button" id="signOut">Sign out</button></div><h2>Your orders</h2><div id="ordersBox">'+ordersHtml()+'</div>'
-        +'<p class="fine">Shipping updates and tracking appear here once your order ships. Questions? <a href="#/contact">Contact us</a>.</p>';
+        +'<p class="fine">Orders are matched by the email used at checkout. Shipping updates and tracking appear here once your order ships. Questions? <a href="#/contact">Contact us</a>.</p>';
       loadOrders();return;
     }
-    var tabs='<div class="subtabs"><a href="#/account" id="tabSignin"'+(sub!=="create"&&sub!=="forgot"?' aria-current="page"':'')+'>Sign in</a><a href="#/account/create" id="tabCreate"'+(sub==="create"?' aria-current="page"':'')+'>Create account</a></div>';
-    if(sub==="create"){
-      el.innerHTML=tabs+'<form data-auth="create"><label>Name<input name="name" required autocomplete="name"></label><label>Email<input name="email" type="email" required autocomplete="email"></label><label>Password (8 or more characters)<input name="password" type="password" required minlength="8" autocomplete="new-password"></label><label>Confirm password<input name="confirm" type="password" required minlength="8" autocomplete="new-password"></label><button class="btn" type="submit">Create account</button><div class="note" role="status"></div><p class="fine">We will email you a link to confirm your address. By creating an account you agree to our <a href="#/terms">Terms</a> and <a href="#/privacy">Privacy Policy</a>.</p></form>';
-    }else if(sub==="forgot"){
-      el.innerHTML=tabs+'<form data-auth="forgot"><label>Email<input name="email" type="email" required autocomplete="email"></label><button class="btn" type="submit">Send reset link</button><div class="note" role="status"></div><p class="fine"><a href="#/account">Back to sign in</a></p></form>';
-    }else{
-      el.innerHTML=tabs+'<form data-auth="signin"><label>Email<input name="email" type="email" required autocomplete="email"></label><label>Password<input name="password" type="password" required autocomplete="current-password"></label><button class="btn" type="submit">Sign in</button><div class="note" role="status"></div><p class="fine"><a href="#/account/forgot">Forgot your password?</a> Or just <a href="#/shop">keep shopping</a>. You never need an account to order.</p></form>';
-    }
+    el.innerHTML='<div class="card" style="max-width:30rem"><h3>Sign in</h3><p>Use your Google account to see your order history and tracking. We never see your Google password.</p>'
+      +'<button class="btn" type="button" id="googleBtn" style="width:100%">Continue with Google</button><div class="note" id="googleNote" role="alert"></div>'
+      +'<p class="fine">To see an order here, use the same email at checkout as your Google account. No account? No problem: you can always <a href="#/shop">check out as a guest</a>.</p></div>';
   }
-  document.addEventListener("submit",function(e){
-    var f=e.target,kind=f.getAttribute&&f.getAttribute("data-auth");if(!kind)return;
-    e.preventDefault();
-    var note=f.querySelector(".note"),btn=f.querySelector('button[type="submit"]');
-    function say(m){note.textContent=m}
-    function busy(b){btn.disabled=b}
-    if(!sb){say("Accounts are still loading. Try again in a moment.");return}
-    var v=function(n){return f.elements[n]?f.elements[n].value:""};
-    say("");
-    if(kind==="signin"){
-      busy(true);
-      sb.auth.signInWithPassword({email:v("email").trim(),password:v("password")}).then(function(r){
-        busy(false);if(r.error){say(authError(r.error));return}
-        location.hash="#/account";
-      }).catch(function(){busy(false);say("Something went wrong. Please try again.")});
-    }else if(kind==="create"){
-      if(v("password").length<8){say("Please use at least 8 characters.");return}
-      if(v("password")!==v("confirm")){say("The two passwords do not match.");return}
-      busy(true);
-      sb.auth.signUp({email:v("email").trim(),password:v("password"),options:{data:{full_name:v("name").trim()},emailRedirectTo:redirectUrl()}}).then(function(r){
-        busy(false);if(r.error){say(authError(r.error));return}
-        if(r.data&&r.data.session)return;
-        $("acctBody").innerHTML='<div class="card"><h3>Check your email</h3><p>We sent a confirmation link to <b>'+esc(v("email").trim())+'</b>. Open it to finish creating your account. If you already have an account with this email, you can <a href="#/account">sign in</a> instead.</p></div>';
-      }).catch(function(){busy(false);say("Something went wrong. Please try again.")});
-    }else if(kind==="forgot"){
-      busy(true);
-      sb.auth.resetPasswordForEmail(v("email").trim(),{redirectTo:redirectUrl()}).then(function(r){
-        busy(false);
-        if(r.error&&/rate|seconds/i.test(r.error.message||"")){say(authError(r.error));return}
-        say("If an account exists for that email, we sent a link to reset your password.");
-      }).catch(function(){busy(false);say("Something went wrong. Please try again.")});
-    }else if(kind==="reset"){
-      if(v("password").length<8){say("Please use at least 8 characters.");return}
-      if(v("password")!==v("confirm")){say("The two passwords do not match.");return}
-      busy(true);
-      sb.auth.updateUser({password:v("password")}).then(function(r){
-        busy(false);if(r.error){say(authError(r.error));return}
-        recovery=false;location.hash="#/account";refreshAcctViews();
-      }).catch(function(){busy(false);say("Something went wrong. Please try again.")});
-    }
-  });
   document.addEventListener("click",function(e){
     var b=e.target.closest?e.target.closest("button"):null;if(!b)return;
     var k=b.getAttribute("data-k");
@@ -1144,7 +1086,14 @@ h1[tabindex="-1"]:focus,h2[tabindex="-1"]:focus{outline:none}
       if(act==="rm"||cart[k].qty<1)delete cart[k];
       saveCart();updateBadge();renderCart();return;
     }
-    if(b.id==="signOut"){if(sb)sb.auth.signOut().then(function(){sbUser=null;ordersState=null;recovery=false;renderAccount()});return}
+    if(b.id==="googleBtn"){
+      if(!sb)return;b.disabled=true;
+      sb.auth.signInWithOAuth({provider:"google",options:{redirectTo:redirectUrl()}}).then(function(r){
+        if(r&&r.error){b.disabled=false;var n=$("googleNote");if(n)n.textContent="We could not start Google sign-in. Please try again."}
+      }).catch(function(){b.disabled=false;var n=$("googleNote");if(n)n.textContent="We could not start Google sign-in. Please try again."});
+      return;
+    }
+    if(b.id==="signOut"){if(sb)sb.auth.signOut().then(function(){sbUser=null;ordersState=null;renderAccount()});return}
     if(b.id==="msgOrder"){$("contactMsg").value=orderText();location.hash="#/contact"}
   });
   initAccounts();
