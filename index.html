@@ -153,6 +153,14 @@ form[hidden]{display:none}
 .cof label,.cof input,.cof select{min-width:0}
 select{font:inherit;padding:.7rem .9rem;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink)}
 #acctBody{padding-bottom:3rem}
+.coupon{margin:1rem 0 .4rem;padding-top:1rem;border-top:1px solid var(--line)}
+.coupon label{display:block;font-weight:700;margin-bottom:.4rem}
+.cprow{display:flex;gap:.5rem}
+.cprow input{flex:1;min-width:0;text-transform:uppercase;letter-spacing:.04em}
+.cprow .btn{padding:.6rem 1.1rem}
+.cpnote{min-height:1.3em;margin-top:.4rem;font-size:.9rem}
+.cpnote.good{color:#3df2d0}.cpnote.bad{color:#ff8a80}
+.row.disc span:last-child{color:#3df2d0;font-weight:700}
 .acctwrap{max-width:46rem}
 .hello{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;padding:1.2rem 1.4rem;border:1px solid var(--line);border-radius:16px;background:linear-gradient(135deg,#3a2f17 0%,var(--surface) 65%);margin-bottom:2rem}
 .avatar{width:3.4rem;height:3.4rem;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-style:italic;font-weight:800;font-size:1.8rem;color:var(--goldink);background:linear-gradient(135deg,var(--gold2),var(--gold));box-shadow:0 0 0 2px var(--deep),0 0 0 4px var(--gold)}
@@ -205,10 +213,11 @@ select{font:inherit;padding:.7rem .9rem;border-radius:10px;border:1.5px solid va
 .walletrow:not(:empty){margin-bottom:.9rem}
 .walletrow .paybtn{margin-top:0;opacity:1;cursor:pointer;color:var(--ink);border-color:var(--gold)}.walletrow .paybtn:disabled{opacity:.5;cursor:not-allowed}
 #cardBox{min-height:90px}
-@media (max-width:760px){.cof{grid-template-columns:1fr}.cartgrid{grid-template-columns:1fr}}
+.cartgrid>*{min-width:0}
+@media (max-width:760px){.cof{grid-template-columns:minmax(0,1fr)}.cartgrid{grid-template-columns:minmax(0,1fr)}}
 .row.total{font-weight:700;font-size:1.1rem;border-top:1px solid var(--line);margin-top:.6rem;padding-top:.8rem}
 .paybtn{display:block;width:100%;margin-top:.6rem;padding:.8rem;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);color:var(--muted);font:inherit;font-weight:700;text-align:center;opacity:.65;cursor:not-allowed}
-@media (max-width:820px){.cartgrid{grid-template-columns:1fr}.line{grid-template-columns:1fr auto}.line .qty{grid-column:1}}
+@media (max-width:820px){.cartgrid{grid-template-columns:minmax(0,1fr)}.line{grid-template-columns:1fr auto}.line .qty{grid-column:1}}
 .announce{background:var(--surface);border-bottom:1px solid var(--line);text-align:center;padding:.5rem 1rem;font-size:.9rem;color:var(--muted)}
 .ann[hidden]{display:none}
 .announce button{background:none;border:0;font:inherit;font-weight:700;color:var(--gold2);text-decoration:underline;cursor:pointer;padding:0;margin-left:.5rem}
@@ -911,7 +920,8 @@ h1[tabindex="-1"]:focus,h2[tabindex="-1"]:focus{outline:none}
   function summaryHtml(q){
     var r='<div class="row"><span>Subtotal</span><span>'+(q?cents(q.subtotalCents):money(subtotal()))+'</span></div>';
     if(q){
-      r+='<div class="row"><span>Shipping</span><span>'+(q.shippingCents?cents(q.shippingCents):"Free")+'</span></div>';
+      if(q.discountCents>0)r+='<div class="row disc"><span>Discount'+(q.coupon?' ('+esc(q.coupon.code)+')':'')+'</span><span>&minus;'+cents(q.discountCents)+'</span></div>';
+      r+='<div class="row"><span>Shipping'+(q.coupon&&q.coupon.label==="Free shipping"?' ('+esc(q.coupon.code)+')':'')+'</span><span>'+(q.shippingCents?cents(q.shippingCents):"Free")+'</span></div>';
       r+='<div class="row total"><span>Total</span><span>'+cents(q.totalCents)+'</span></div>';
     }else r+='<p class="fine">Shipping is shown once the total is calculated.</p>';
     return r;
@@ -945,21 +955,48 @@ h1[tabindex="-1"]:focus,h2[tabindex="-1"]:focus{outline:none}
       +'<div class="note" id="payNote" role="alert"></div>'
       +'<p class="fine">Payments are processed by Square. Your card details go straight to Square and are never stored on our site.</p></div>'
       +'</form></div>'
-      +'<div class="card"><h3>Order summary</h3>'+cartLines(false)+'<div id="sumBox">'+summaryHtml(null)+'</div></div></div>';
-    var ctl=payCtl={dead:false,quote:null,busy:false};
+      +'<div class="card"><h3>Order summary</h3>'+cartLines(false)
+      +'<div class="coupon"><label for="cpIn">Discount code</label><div class="cprow"><input id="cpIn" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="32" placeholder="Enter code"><button class="btn ghost" type="button" id="cpApply">Apply</button></div><div class="cpnote" id="cpNote" role="status"></div></div>'
+      +'<div id="sumBox">'+summaryHtml(null)+'</div></div></div>';
+    var ctl=payCtl={dead:false,quote:null,busy:false,coupon:""};
     var form=$("coForm"),note=$("payNote"),payBtn=$("payBtn");
     if(sbUser&&sbUser.email)form.email.value=sbUser.email;
     function say(m){note.textContent=m||""}
     function setQuote(q){ctl.quote=q;$("sumBox").innerHTML=summaryHtml(q)}
-    function getQuote(){
-      post("/quote",{items:itemsPayload(),state:form.state.value||""}).then(function(r){
+    function cpSay(m,good){var n=$("cpNote");if(!n)return;n.textContent=m||"";n.className="cpnote"+(m?(good?" good":" bad"):"")}
+    function cpShowApplied(q){
+      if(q&&q.coupon){cpSay("Applied: "+q.coupon.code+" ("+q.coupon.label+")",true);$("cpIn").value=q.coupon.code;$("cpApply").textContent="Remove";$("cpApply").setAttribute("data-mode","remove")}
+      else{$("cpApply").textContent="Apply";$("cpApply").removeAttribute("data-mode")}
+    }
+    // tryCode: a code the customer just typed. If it fails we keep whatever code was already applied.
+    function getQuote(tryCode){
+      var sending=tryCode!==undefined?tryCode:ctl.coupon;
+      return post("/quote",{items:itemsPayload(),state:form.state.value||"",coupon:sending||""}).then(function(r){
         if(ctl.dead)return;
-        if(r.status===200&&r.body&&r.body.totalCents>0)setQuote(r.body);
-        else say((r.body&&r.body.message)||"We could not calculate your total. Please refresh and try again.");
+        var b=r.body||{};
+        if(r.status===200&&b.totalCents>0){
+          if(b.couponError){
+            cpSay(b.couponError,false);
+            if(tryCode!==undefined&&ctl.coupon){return getQuote().then(function(){cpSay(b.couponError+" Your "+ctl.coupon+" code is still applied.",false)})}   // keep the previously applied code
+            ctl.coupon="";setQuote(b);cpShowApplied(null);cpSay(b.couponError,false);return;
+          }
+          if(tryCode!==undefined)ctl.coupon=b.coupon?b.coupon.code:"";
+          setQuote(b);cpShowApplied(b);
+          if(!b.coupon&&tryCode===undefined)cpSay("");
+        }else say(b.message||"We could not calculate your total. Please refresh and try again.");
       }).catch(function(){if(!ctl.dead)say("We could not reach checkout. Check your connection and try again.")});
     }
+    function cpApply(){
+      var btn=$("cpApply");
+      if(btn.getAttribute("data-mode")==="remove"){ctl.coupon="";$("cpIn").value="";cpSay("");getQuote("");return}
+      var c=$("cpIn").value.trim();if(!c){cpSay("Enter a code first.",false);return}
+      cpSay("Checking...");getQuote(c);
+    }
+    $("cpApply").addEventListener("click",cpApply);
+    $("cpIn").addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();cpApply()}});
+    $("cpIn").addEventListener("input",function(){var b=$("cpApply");if(b.getAttribute("data-mode")==="remove"){b.textContent="Apply";b.removeAttribute("data-mode")}});
     getQuote();
-    form.state.addEventListener("change",getQuote);
+    form.state.addEventListener("change",function(){getQuote()});
     function buyer(){return {email:form.email.value.trim(),phone:form.phone.value.trim(),name:form.name.value.trim(),
       address:{line1:form.line1.value.trim(),line2:form.line2.value.trim(),city:form.city.value.trim(),state:form.state.value,zip:form.zip.value.trim()}}}
     function setBusy(b){ctl.busy=b;payBtn.disabled=b||!ctl.cardReady;var w=document.querySelectorAll("#walletRow button");for(var i=0;i<w.length;i++)w[i].disabled=b;
@@ -975,12 +1012,13 @@ h1[tabindex="-1"]:focus,h2[tabindex="-1"]:focus{outline:none}
           var m=res&&res.errors&&res.errors[0]&&res.errors[0].message;
           throw {user:m||"We could not read that payment method. Please check it and try again."};
         }
-        return post("/pay",{token:res.token,items:itemsPayload(),buyer:buyer(),expectedTotalCents:ctl.quote.totalCents,idempotencyKey:uuid()});
+        return post("/pay",{token:res.token,items:itemsPayload(),buyer:buyer(),expectedTotalCents:ctl.quote.totalCents,coupon:ctl.coupon||"",idempotencyKey:uuid()});
       }).then(function(r){
         if(ctl.dead)return;
         var b=r.body||{};
         if(r.status===200&&b.ok){return success(b)}
-        if(b.code==="totals_changed"&&b.quote){setQuote(b.quote);throw {user:"Your total changed to "+cents(b.quote.totalCents)+". Nothing was charged. Please review and press Pay again."}}
+        if(b.code==="coupon_invalid"){ctl.coupon="";$("cpIn").value="";getQuote("");throw {user:(b.message||"That code could not be used.")+" Nothing was charged. Your total has been updated."}}
+        if(b.code==="totals_changed"&&b.quote){setQuote(b.quote);cpShowApplied(b.quote);throw {user:"Your total changed to "+cents(b.quote.totalCents)+". Nothing was charged. Please review and press Pay again."}}
         throw {user:b.message||"Payment did not go through. You were not charged."};
       }).catch(function(e){
         if(ctl.dead)return;
@@ -994,7 +1032,7 @@ h1[tabindex="-1"]:focus,h2[tabindex="-1"]:focus{outline:none}
       var acctNote=accountsReady()?(sbUser?'<p>This order will appear in your account order history.</p>':'<p>Want to track it? <a href="#/account">Sign in with Google</a> using <b>'+esc(em)+'</b> and this order will show up in your order history.</p>'):"";
       var rec=/^https:\/\//.test(b.receiptUrl||"")?'<p><a href="'+esc(b.receiptUrl)+'" target="_blank" rel="noopener noreferrer">View your receipt</a></p>':"";
       cart={};saveCart();updateBadge();teardownPay();
-      $("checkoutBody").innerHTML='<div class="card"><h2>Thank you! Your order is placed.</h2><p>Order number: <b>'+esc(String(b.orderRef||b.orderId||"").slice(0,40))+'</b></p><p>A receipt is on its way to your email. We will email tracking once your order ships.</p>'+acctNote+saveNote+rec+'<a class="btn" href="#/shop">Keep shopping</a></div>';
+      $("checkoutBody").innerHTML='<div class="card"><h2>Thank you! Your order is placed.</h2><p>Order #: <b>'+esc(String(b.orderRef||b.orderId||"").slice(0,40))+'</b></p><p>A receipt is on its way to your email. We will email tracking once your order ships.</p>'+acctNote+saveNote+rec+'<a class="btn" href="#/shop">Keep shopping</a></div>';
       window.scrollTo(0,0);
     }
     form.addEventListener("submit",function(e){e.preventDefault();if(ctl.card)submit(function(){return ctl.card.tokenize()})});
@@ -1100,16 +1138,16 @@ h1[tabindex="-1"]:focus,h2[tabindex="-1"]:focus{outline:none}
         return '<li><span>'+esc(String(q))+' &times; '+esc(String(i.name||"Item"))+'</span><span>'+(i.priceCents?cents(line):"")+'</span></li>'}).join("");
       var d=o.created_at?new Date(o.created_at).toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"}):"";
       var track=o.tracking_number?'<div class="trk"><div><small>'+(o.carrier?esc(String(o.carrier))+" tracking":"Tracking")+'</small><br><b>'+esc(String(o.tracking_number))+'</b></div>'+(tu?'<a class="btn" href="'+esc(tu)+'" target="_blank" rel="noopener noreferrer">Track package</a>':"")+'</div>':"";
-      return '<article class="card ord"><div class="ordhead"><div><h3>Order '+esc(String(o.order_ref||""))+'</h3><small>Placed '+esc(d)+'</small></div><span class="stat s-'+esc(st)+'">'+esc(STATUS_LABEL[st]||st)+'</span></div>'
+      return '<article class="card ord"><div class="ordhead"><div><h3>Order #'+esc(String(o.order_ref||""))+'</h3><small>Placed '+esc(d)+'</small></div><span class="stat s-'+esc(st)+'">'+esc(STATUS_LABEL[st]||st)+'</span></div>'
         +progressHtml(st)+'<ul class="oitems">'+items+'</ul>'
-        +'<div class="row"><span>Shipping</span><span>'+(o.shipping_cents?cents(o.shipping_cents):"Free")+'</span></div><div class="row total"><span>Total</span><span>'+cents(o.total_cents)+'</span></div>'
+        +(o.discount_cents>0?'<div class="row disc"><span>Discount'+(o.coupon_code?' ('+esc(String(o.coupon_code))+')':'')+'</span><span>&minus;'+cents(o.discount_cents)+'</span></div>':'')+'<div class="row"><span>Shipping</span><span>'+(o.shipping_cents?cents(o.shipping_cents):"Free")+'</span></div><div class="row total"><span>Total</span><span>'+cents(o.total_cents)+'</span></div>'
         +addrHtml(o.ship_address)+track+'</article>';
     }).join("")+'</div>';
   }
   function loadOrders(){
     if(!sb||!sbUser||ordersState)return;
     ordersState="loading";
-    sb.from("orders").select("order_ref,created_at,items,shipping_cents,total_cents,status,tracking_number,tracking_url,carrier,ship_address").order("created_at",{ascending:false}).limit(50)
+    sb.from("orders").select("order_ref,created_at,items,shipping_cents,total_cents,status,tracking_number,tracking_url,carrier,ship_address,coupon_code,discount_cents").order("created_at",{ascending:false}).limit(50)
       .then(function(r){ordersState=r.error?"error":(r.data||[]);if(curParts()[0]==="account")renderAccount()})
       .catch(function(){ordersState="error";var b=$("ordersBox");if(b)b.innerHTML=ordersHtml()});
   }
