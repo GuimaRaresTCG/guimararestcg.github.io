@@ -673,13 +673,13 @@ h1[tabindex="-1"]:focus,h2[tabindex="-1"]:focus{outline:none}
   function esc(s){return String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;")}
   // ONLINE CHECKOUT SETTINGS (fill these in after Square + Cloudflare setup, see the setup guide).
   // These values are public and safe to be on the website. The secret Square token lives only on the server.
-  var CHECKOUT={env:"sandbox",appId:"",locationId:"",api:""};
+  var CHECKOUT={env:"sandbox",appId:"sandbox-sq0idb-tcO55DTiJ1x4zdFN11c6pQ",locationId:"L2H9HDJ4QKDP1",api:"https://guimarares-checkout.guimararestcg.workers.dev"};
   var MAXQTY=10;
   // STOCK: one line per product that is available. Key = product SKU (the product name in lowercase, letters and numbers
   // with dashes between words, no accents). Value = most a customer can buy in one order.
   // A product that is not listed here shows Out of stock. The server (Cloudflare Worker) has its own price list,
   // and prices are always checked there, so changing a price here alone never changes what a customer is charged.
-  var STOCK={};
+  var STOCK={/*TEST-START*/"test-item-not-for-sale":5/*TEST-END*/};
   function slug(s){return String(s).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"")}
   function isInStock(name){return STOCK[slug(name)]>0}
   function card(face,n,c,p){
@@ -724,7 +724,7 @@ h1[tabindex="-1"]:focus,h2[tabindex="-1"]:focus{outline:none}
     bundles:[["Sample booster bundle","Sealed","$24.00"],["Sample booster bundle","Sealed","$27.00"]],
     sealed:[["Sample collection box","Sealed","$39.00"],["Sample starter deck","Sealed","$14.00"],["Sample tin","Sealed","$22.00"]]
   };
-  var TEST_ITEMS=[];
+  var TEST_ITEMS=[/*TEST-START*/["TEST ITEM (not for sale)","Near Mint","$1.00"]/*TEST-END*/];
   function itemsFor(g,sid){return (g.id==="pokemon"&&sid==="singles")?TEST_ITEMS.concat(secData[sid]):secData[sid]}
   function secsFor(g){
     var s=[{id:"singles",n:"Singles"}];
